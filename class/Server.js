@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const { conexion } = require("../config/Sequelize");
 const { usuarioRouter } = require('../routes/auth/usuario')
 const { ollaComunRouter } = require('../routes/programa-social/olla-comun')
+const { personaRouter } = require('../routes/auth/persona')
 
 class Server {
     constructor() {
@@ -26,14 +27,15 @@ class Server {
             res.status(200).send({'mensaje':'Api funcionando base'}))
         this.app.use('/auth', usuarioRouter)
         this.app.use('/olla-comun', ollaComunRouter)
+        this.app.use('/persona', personaRouter)
     }
     start() {
         this.app.listen(
             this.puerto,
             () => console.log(`API REST Inicializado correctamente ${this.puerto}.`))
         conexion.sync({
-            alter: true,
-            force: true
+            alter: false,
+            force: false
         })
             .then(() => console.log('Base de datos sincronizada', this.puerto))
     }
