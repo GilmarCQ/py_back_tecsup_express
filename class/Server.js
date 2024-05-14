@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 
 const { conexion } = require("../config/Sequelize");
+const { usuarioRouter } = require('../routes/auth/usuario')
+const { ollaComunRouter } = require('../routes/programa-social/olla-comun')
 
 class Server {
     constructor() {
@@ -19,18 +21,19 @@ class Server {
         this.app.use(express.urlencoded())
     }
     loadRutas() {
-        console.log('LOAD RUTAS')
         this.app.get('/',
             (req, res) =>
             res.status(200).send({'mensaje':'Api funcionando base'}))
+        this.app.use('/auth', usuarioRouter)
+        this.app.use('/olla-comun', ollaComunRouter)
     }
     start() {
         this.app.listen(
             this.puerto,
             () => console.log(`API REST Inicializado correctamente ${this.puerto}.`))
         conexion.sync({
-            alter: false,
-            force: false
+            alter: true,
+            force: true
         })
             .then(() => console.log('Base de datos sincronizada', this.puerto))
     }
