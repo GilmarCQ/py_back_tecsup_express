@@ -37,7 +37,7 @@ class Server {
             alter: false,
             force: false
         })
-            .then(() => console.log('Base de datos sincronizada', this.puerto))
+            .then(() => console.log('Base de datos sincronizada'))
     }
 }
 
